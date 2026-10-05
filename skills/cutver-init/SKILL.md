@@ -1,123 +1,49 @@
 ---
 name: cutver-init
-description: Initialize and onboard projects to Cutver by autodiscovering multi-language manifests and generating cutver.toml.
-triggers:
-  - init
-  - cutver init
-  - configure cutver
-  - setup cutver
-  - onboard cutver
+description: "Trigger: cutver init, init cutver, onboard cutver, scaffold cutver, configure cutver. Autodiscover workspace manifests and generate canonical cutver.toml configuration."
+license: Apache-2.0
+metadata:
+  author: cutver
+  version: "2.0"
 ---
 
-# cutver-init
+## Activation Contract
+Activate when the user asks to initialize, scaffold, onboard, or configure Cutver in a workspace, or runs commands matching `cutver init`.
 
-Guide for onboarding workspaces and repositories to Cutver, autodiscovering manifests across ecosystems, and configuring `cutver.toml`.
+## Hard Rules
+- Always run discovery from the workspace repository root.
+- Never overwrite an existing `cutver.toml` without explicit user confirmation.
+- Respect monorepo workspace configurations; never configure subprojects as separate roots unless explicitly requested.
+- Ensure all discovered manifest paths exist before generating configuration.
 
-## Overview
+## Decision Gates
+1. **Workspace Layout Detection**:
+   - Single package: detect `Cargo.toml`, `package.json`, `pyproject.toml`, or `build.gradle*` at root.
+   - Monorepo: detect workspace members across Cargo (`[workspace.members]`), npm/pnpm/yarn/bun (`workspaces` in `package.json` or `pnpm-workspace.yaml`), Gradle (`settings.gradle*`), or Python uv/poetry workspaces.
+2. **Configuration Mode**:
+   - Conventional mode (default): standard keep-a-changelog with conventional commit parsing.
+   - Template mode: custom MiniJinja template referenced via `[changelog.template]`.
 
-`cutver init` scans your repository root and subdirectories to automatically detect supported project manifests:
-- **Rust**: `Cargo.toml` (single crate and multi-crate Cargo workspaces)
-- **Node.js / JavaScript / TypeScript**: `package.json` (npm, pnpm, yarn, bun workspaces)
-- **Python**: `pyproject.toml` (Poetry, Flit, Hatch, uv)
-- **JVM / Android**: `build.gradle`, `build.gradle.kts`, `gradle.properties`
-- **Tauri**: `src-tauri/tauri.conf.json`
+## Execution Steps
+1. Scan the repository root and subdirectories to identify manifests (`Cargo.toml`, `package.json`, `pyproject.toml`, `build.gradle*`, `tauri.conf.json`).
+2. Verify if `cutver.toml` already exists:
+   - If present: stop and request explicit user confirmation before overwriting or use `cutver init --update`.
+   - If absent: proceed with initialization.
+3. Execute initialization command:
+   ```bash
+   cutver init
+   ```
+   For non-interactive environments, append `--yes` or appropriate flags.
+4. Verify the generated `cutver.toml` by running:
+   ```bash
+   cutver doctor
+   ```
 
-It aggregates the discovered manifests and generates a tailored `cutver.toml` configuration file.
+## Output Contract
+- Report detected manifest types and paths.
+- Display generated `cutver.toml` summary (manifest list, changelog mode, git tag settings).
+- State doctor verification status (`cutver doctor` exit code 0 confirmation).
 
----
-
-## Onboarding Procedure
-
-### Step 1: Inspect Workspace Structure
-Before running initialization, inspect the repository to understand its layout:
-
-```bash
-# Check existing manifest files
-git ls-files "*Cargo.toml" "*package.json" "*pyproject.toml" "*tauri.conf.json" "*gradle*"
-```
-
-### Step 2: Run `cutver init`
-Execute `cutver init` at the root of the repository:
-
-```bash
-cutver init
-```
-
-Cutver will:
-1. Scan for known manifest types across the repository tree.
-2. Detect the current version across discovered files.
-3. Suggest a baseline configuration and prompt for confirmation (or generate automatically in non-interactive modes).
-4. Write the resulting `cutver.toml`.
-
-### Step 3: Understanding the Generated `cutver.toml`
-A typical generated `cutver.toml` declares manifests and release policies:
-
-```toml
-# cutver.toml - release orchestration configuration
-
-[[manifest]]
-path = "Cargo.toml"
-kind = "cargo-package"
-
-[[manifest]]
-path = "package.json"
-kind = "json"
-field = "version"
-
-[[manifest]]
-path = "pyproject.toml"
-kind = "pyproject"
-
-[changelog]
-path = "CHANGELOG.md"
-format = "keep-a-changelog"
-mode = "conventional"
-
-[git]
-tag_prefix = "v"
-commit_message = "chore(release): v{version} [skip ci]"
-require_clean_tree = true
-require_branch = "main"
-
-[publish]
-push = true
-```
-
-### Step 4: Verify the New Configuration
-Immediately verify the configuration using `cutver doctor`:
-
-```bash
-cutver doctor
-```
-
-If doctor exits with `0`, onboarding is complete and the repository is ready for releases.
-
----
-
-## Updating Existing Configurations (`--update`)
-
-When adding new sub-crates, packages, or services to an already configured repository:
-
-```bash
-# Scan repository for new manifests and append them to cutver.toml
-cutver init --update
-```
-
-The `--update` flag:
-- Preserves your existing custom settings (git commit template, changelog format, tag prefix).
-- Detects newly created manifests not yet tracked in `cutver.toml`.
-- Merges the newly discovered paths into the `manifests` array.
-
----
-
-## Command Flags & Customization
-
-### Flags
-- `--update`: Updates an existing `cutver.toml` with newly detected manifests without overwriting user settings.
-- `--force`: Overwrites an existing `cutver.toml` file with a freshly generated configuration.
-- `--manifest <TYPE>`: Restrict manifest discovery to specific ecosystems (e.g. `cargo`, `npm`, `python`).
-
-### Common Customizations in `cutver.toml`
-- **`tag_prefix`**: Set to `""` if tags should be `1.0.0` instead of `v1.0.0`.
-- **`git.commit_message`**: Customize conventional commit format (e.g., `release: v{{ version }}`).
-- **`manifests`**: Add custom JSON, TOML, or YAML files using JSONPath or regex selectors if using non-standard file formats.
+## References
+- `cutver.toml` specification: `https://github.com/cutver/cutver#configuration`
+- Manifest types: Cargo (`cargo-package`), JSON (`json`), TOML/pyproject (`pyproject`), Gradle (`gradle`).
