@@ -36,10 +36,14 @@ npx skills add cutver/skills --skill cutver-release
 
 | Skill | Name | Description | Common Triggers |
 |:---|:---|:---|:---|
-| [`cutver-release`](./skills/cutver-release/SKILL.md) | `cutver-release` | Safe version bumping with mandatory dry-run simulation, conventional commit analysis, and changelog generation. | `release`, `cut release`, `bump version`, `semver bump`, `cutver bump` |
-| [`cutver-doctor`](./skills/cutver-doctor/SKILL.md) | `cutver-doctor` | Workspace diagnostic checks detecting version drift across manifests and changelog desynchronization. | `doctor`, `cutver doctor`, `verify manifests`, `check changelog drift`, `release health check` |
-| [`cutver-init`](./skills/cutver-init/SKILL.md) | `cutver-init` | Project onboarding and manifest autodiscovery for Rust, Node, Python, Gradle, and Tauri projects. | `init`, `cutver init`, `configure cutver`, `setup cutver`, `onboard cutver` |
-| [`cutver-changelog`](./skills/cutver-changelog/SKILL.md) | `cutver-changelog` | Extract release notes for CI/CD, GitHub Releases, PR descriptions, and custom MiniJinja templates. | `changelog`, `cutver changelog`, `extract release notes`, `changelog latest`, `show release notes` |
+| [`cutver-init`](./skills/cutver-init/SKILL.md) | `cutver-init` | Manifest autodiscovery and `cutver.toml` generation across polyglot workspaces. | `cutver init`, `init cutver`, `onboard cutver`, `scaffold cutver`, `configure cutver` |
+| [`cutver-doctor`](./skills/cutver-doctor/SKILL.md) | `cutver-doctor` | Workspace diagnostic checks detecting version drift across manifests and changelog desynchronization. | `cutver doctor`, `doctor`, `check changelog drift`, `verify manifests`, `release health check` |
+| [`cutver-release`](./skills/cutver-release/SKILL.md) | `cutver-release` | Safe version bumping with mandatory dry-run simulation, conventional commit analysis, and changelog generation. | `cutver bump`, `cutver release`, `cut release`, `bump version`, `semver bump`, `first release` |
+| [`cutver-changelog`](./skills/cutver-changelog/SKILL.md) | `cutver-changelog` | Release note extraction for CI/CD, GitHub Releases, PR descriptions, and custom MiniJinja templates. | `cutver changelog`, `changelog latest`, `cutver changelog show`, `extract release notes`, `changelog template` |
+| [`cutver-actions`](./skills/cutver-actions/SKILL.md) | `cutver-actions` | GitHub Actions workflow scaffolding with `cutver/setup` and `cutver/release` orchestration. | `cutver action`, `cutver/setup`, `cutver/release`, `github actions cutver`, `ci release workflow` |
+| [`cutver-containers`](./skills/cutver-containers/SKILL.md) | `cutver-containers` | Containerized execution with Docker, Podman, and WSL Containers via `ghcr.io/cutver/cutver`. | `cutver container`, `cutver docker`, `cutver podman`, `cutver wslc`, `ghcr.io/cutver/cutver` |
+| [`cutver-install`](./skills/cutver-install/SKILL.md) | `cutver-install` | Platform-specific CLI installation via Homebrew, Scoop, Cargo, or verified binary releases. | `install cutver`, `setup cutver cli`, `brew install cutver`, `scoop install cutver`, `download cutver` |
+| [`cutver-open`](./skills/cutver-open/SKILL.md) | `cutver-open` | Fast terminal and browser navigation to documentation, changelogs, releases, and repository. | `cutver open`, `open changelog`, `open release notes`, `open cutver docs`, `open cutver repo` |
 
 ---
 
