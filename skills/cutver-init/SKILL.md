@@ -22,18 +22,18 @@ Activate when the user asks to initialize, scaffold, onboard, or configure Cutve
    - Monorepo: detect workspace members across Cargo (`[workspace.members]`), npm/pnpm/yarn/bun (`workspaces` in `package.json` or `pnpm-workspace.yaml`), Gradle (`settings.gradle*`), or Python uv/poetry workspaces.
 2. **Configuration Mode**:
    - Conventional mode (default): standard keep-a-changelog with conventional commit parsing.
-   - Template mode: custom MiniJinja template referenced via `[changelog.template]`.
+   - Template mode: an inline `[changelog] template` string or a `[changelog] template_file` path; `template` wins when both are set.
 
 ## Execution Steps
 1. Scan the repository root and subdirectories to identify manifests (`Cargo.toml`, `package.json`, `pyproject.toml`, `build.gradle*`, `tauri.conf.json`).
-2. Verify if `cutver.toml` already exists:
-   - If present: stop and request explicit user confirmation before overwriting or use `cutver init --update`.
-   - If absent: proceed with initialization.
+2. Verify whether `cutver.toml` already exists. `cutver init` never prompts: with the file present it exits `1` and names both options in the error.
+   - Add newly discovered manifests, keeping existing settings: `cutver init --update`.
+   - Overwrite the file and the default template: `cutver init --force`, only after user confirmation.
 3. Execute initialization command:
    ```bash
    cutver init
    ```
-   For non-interactive environments, append `--yes` or appropriate flags.
+   There is no `--yes` flag. Also available: `-p/--path <DIR>` (target directory) and `--no-template` (visible alias `--nt`, skips `.github/templates/cutver/RELEASE.md`).
 4. Verify the generated `cutver.toml` by running:
    ```bash
    cutver doctor

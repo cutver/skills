@@ -52,8 +52,11 @@ Activate when the user asks to view, extract, preview, or render release notes, 
 
 ## Output Contract
 - Stream extracted markdown release notes to standard output.
+- On a terminal with colors on, headings, categories, and bullets are styled and markdown links become OSC 8 hyperlinks whose URLs are repeated in a footnote section.
+- Colors are off when the stream is not a TTY, `NO_COLOR` is non-empty, or `CLICOLOR=0`; a `CLICOLOR_FORCE` value other than `0` forces them on. With colors off the markdown is printed byte-for-byte unstyled, so redirected output stays clean.
 - Validate that extracted notes are non-empty and correspond to the requested release target.
 
 ## References
 - Subcommands: `cutver changelog latest`, `cutver changelog show <version>`
-- Template support: MiniJinja template context variables (`version`, `tag`, `breaking`, `features`, `fixes`, `contributors`, `compare_url`).
+- Template support: MiniJinja context, partial list — `version`, `previous_version`, `tag`, `date`, `is_prerelease`, `repo_owner`, `repo_name`, `compare_url`, the category blocks (`breaking`, `features`, `fixes`, `perf`, `refactor`, `docs`, `maintenance`, `other`, `all_changes`), `commits`, `contributors`.
+- Full context of the installed build: `cutver changelog latest --json`. Template keys: `docs/reference/configuration.md` `[changelog]`. Filters and commit fields: `docs/templates/release-notes.md`.

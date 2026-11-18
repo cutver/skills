@@ -42,8 +42,8 @@ npx skills add cutver/skills --skill cutver-release
 | [`cutver-changelog`](./skills/cutver-changelog/SKILL.md) | `cutver-changelog` | Release note extraction for CI/CD, GitHub Releases, PR descriptions, and custom MiniJinja templates. | `cutver changelog`, `changelog latest`, `cutver changelog show`, `extract release notes`, `changelog template` |
 | [`cutver-actions`](./skills/cutver-actions/SKILL.md) | `cutver-actions` | GitHub Actions workflow scaffolding with `cutver/setup` and `cutver/release` orchestration. | `cutver action`, `cutver/setup`, `cutver/release`, `github actions cutver`, `ci release workflow` |
 | [`cutver-containers`](./skills/cutver-containers/SKILL.md) | `cutver-containers` | Containerized execution with Docker, Podman, and WSL Containers via `ghcr.io/cutver/cutver`. | `cutver container`, `cutver docker`, `cutver podman`, `cutver wslc`, `ghcr.io/cutver/cutver` |
-| [`cutver-install`](./skills/cutver-install/SKILL.md) | `cutver-install` | Platform-specific CLI installation via Homebrew, Scoop, Cargo, or verified binary releases. | `install cutver`, `setup cutver cli`, `brew install cutver`, `scoop install cutver`, `download cutver` |
-| [`cutver-open`](./skills/cutver-open/SKILL.md) | `cutver-open` | Fast terminal and browser navigation to documentation, changelogs, releases, and repository. | `cutver open`, `open changelog`, `open release notes`, `open cutver docs`, `open cutver repo` |
+| [`cutver-install`](./skills/cutver-install/SKILL.md) | `cutver-install` | Platform-specific CLI installation via Homebrew, Scoop, Cargo, or release binaries checked against `SHA256SUMS` and its Cosign bundle, lean and plugin variants alike. | `install cutver`, `setup cutver cli`, `brew install cutver`, `scoop install cutver`, `download cutver` |
+| [`cutver-open`](./skills/cutver-open/SKILL.md) | `cutver-open` | Browser navigation to the repository remote, a release tag, or a tag comparison via `cutver open`. | `cutver open`, `open release notes`, `open release tag`, `compare tags`, `open cutver repo` |
 
 ---
 

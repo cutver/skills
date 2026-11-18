@@ -12,7 +12,8 @@ Activate when the user asks to run Cutver via Docker, Podman, WSL Containers, or
 
 ## Hard Rules
 - Always mount the current workspace directory to `/workspace`: `-v "$PWD:/workspace"`.
-- Adhere to official container image tag conventions: `ghcr.io/cutver/cutver:latest`, `:v<version>`, or major tag `:v0`.
+- Use the published image tags: `ghcr.io/cutver/cutver:latest`, `:<version>` (e.g. `0.13.0`), `:<major>.<minor>` (e.g. `0.13`), the floating major `:<major>` (e.g. `0`), and the branch and commit tags `:main` and `:sha-<sha>`; no tag carries a `v` prefix. `:latest` is added when a release is published and on a `workflow_dispatch` run whose ref is `main`; the workflow has no push trigger, so landing a commit on `main` does not publish it. Pin `:<version>` when a stable release matters.
+- The plugin-enabled image publishes `:<version>-plugins`, `:<major>.<minor>-plugins`, and the floating `:plugins`; there is no `:<major>-plugins` and no `:latest-plugins`.
 - When running in non-root or SELinux environments, apply proper volume flags and git safe directory configurations.
 - Default to simulation (`--dry-run`) or diagnostic (`doctor`) operations unless mutating execution is explicitly requested.
 
@@ -20,7 +21,7 @@ Activate when the user asks to run Cutver via Docker, Podman, WSL Containers, or
 1. **Container Engine**:
    - Docker: `docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/cutver/cutver <command>`.
    - Podman (rootless/SELinux): append `:Z` volume flag: `-v "$PWD:/workspace:Z"`.
-   - WSL Containers (`wslc`): invoke via `wslc run ghcr.io/cutver/cutver <command>`.
+   - WSL Containers (`wslc`): mount the workspace with Windows path syntax: `wslc run --rm -v "${PWD}:/workspace" ghcr.io/cutver/cutver:latest <command>`.
 2. **Subcommand**:
    - Diagnostic: `doctor --check-changelog`.
    - Release simulation: `bump auto --dry-run`.
@@ -52,4 +53,4 @@ Activate when the user asks to run Cutver via Docker, Podman, WSL Containers, or
 
 ## References
 - Container Registry: `ghcr.io/cutver/cutver`
-- Tags: `latest`, `v0`, `v0.10.0`
+- Tags: `latest`, `0.13.0`, `0.13`, `0`, `0.13.0-plugins`, `0.13-plugins`, `plugins`, `main`, `sha-<sha>`
